@@ -45,30 +45,115 @@ func (e *Entry) OnError(err error) *Entry {
 }
 
 func (e *Entry) Debug(args ...interface{}) {
-	e.log(e.Debug, args...)
+	e.Log(logrus.DebugLevel, args...)
+}
+
+func (e *Entry) Debugln(args ...interface{}) {
+	e.Logln(logrus.DebugLevel, args...)
+}
+
+func (e *Entry) Debugf(format string, args ...interface{}) {
+	e.Logf(logrus.DebugLevel, format, args...)
+}
+
+func (e *Entry) Info(args ...interface{}) {
+	e.Log(logrus.InfoLevel, args...)
+}
+
+func (e *Entry) Infoln(args ...interface{}) {
+	e.Logln(logrus.InfoLevel, args...)
+}
+
+func (e *Entry) Infof(format string, args ...interface{}) {
+	e.Logf(logrus.InfoLevel, format, args...)
+}
+
+func (e *Entry) Trace(args ...interface{}) {
+	e.Log(logrus.TraceLevel, args...)
+}
+
+func (e *Entry) Traceln(args ...interface{}) {
+	e.Logln(logrus.TraceLevel, args...)
+}
+
+func (e *Entry) Tracef(format string, args ...interface{}) {
+	e.Logf(logrus.TraceLevel, format, args...)
 }
 
 func (e *Entry) Warn(args ...interface{}) {
-	e.log(e.Warn, args...)
+	e.Log(logrus.WarnLevel, args...)
+}
+
+func (e *Entry) Warnln(args ...interface{}) {
+	e.Logln(logrus.WarnLevel, args...)
+}
+
+func (e *Entry) Warnf(format string, args ...interface{}) {
+	e.Logf(logrus.WarnLevel, format, args...)
+}
+
+func (e *Entry) Warning(args ...interface{}) {
+	e.Log(logrus.WarnLevel, args...)
+}
+
+func (e *Entry) Warningln(args ...interface{}) {
+	e.Logln(logrus.WarnLevel, args...)
+}
+
+func (e *Entry) Warningf(format string, args ...interface{}) {
+	e.Logf(logrus.WarnLevel, format, args...)
 }
 
 func (e *Entry) Error(args ...interface{}) {
-	e.log(e.Error, args...)
+	e.Log(logrus.ErrorLevel, args...)
+}
+
+func (e *Entry) Errorln(args ...interface{}) {
+	e.Logln(logrus.ErrorLevel, args...)
+}
+
+func (e *Entry) Errorf(format string, args ...interface{}) {
+	e.Logf(logrus.ErrorLevel, format, args...)
 }
 
 func (e *Entry) Fatal(args ...interface{}) {
-	e.log(e.Fatal, args...)
+	e.Log(logrus.FatalLevel, args...)
+}
+
+func (e *Entry) Fatalln(args ...interface{}) {
+	e.Logln(logrus.FatalLevel, args...)
+}
+
+func (e *Entry) Fatalf(format string, args ...interface{}) {
+	e.Logf(logrus.FatalLevel, format, args...)
 }
 
 func (e *Entry) Panic(args ...interface{}) {
-	e.log(e.Panic, args...)
+	e.Log(logrus.PanicLevel, args...)
 }
 
-func (e *Entry) log(log func(...interface{}), args ...interface{}) {
-	if e.onError && e.err != nil {
-		log(args...)
+func (e *Entry) Panicln(args ...interface{}) {
+	e.Logln(logrus.PanicLevel, args...)
+}
+
+func (e *Entry) Panicf(format string, args ...interface{}) {
+	e.Logf(logrus.PanicLevel, format, args...)
+}
+
+func (e *Entry) Log(level logrus.Level, args ...interface{}) {
+	if (e.onError && e.err != nil) || !e.onError {
+		e.Entry.Log(level, args...)
 	}
-	if !e.onError {
-		log(args...)
+}
+
+func (e *Entry) Logf(level logrus.Level, format string, args ...interface{}) {
+	if (e.onError && e.err != nil) || !e.onError {
+		e.Entry.Logf(level, format, args...)
+	}
+}
+
+func (e *Entry) Logln(level logrus.Level, args ...interface{}) {
+	if (e.onError && e.err != nil) || !e.onError {
+		e.Entry.Logln(level, args...)
 	}
 }
