@@ -141,19 +141,28 @@ func (e *Entry) Panicf(format string, args ...interface{}) {
 }
 
 func (e *Entry) Log(level logrus.Level, args ...interface{}) {
-	if (e.onError && e.err != nil) || !e.onError {
+	if e.onError && e.err != nil {
+		e.WithError(e.err).Log(level, args...)
+	}
+	if !e.onError {
 		e.Entry.Log(level, args...)
 	}
 }
 
 func (e *Entry) Logf(level logrus.Level, format string, args ...interface{}) {
-	if (e.onError && e.err != nil) || !e.onError {
+	if e.onError && e.err != nil {
+		e.WithError(e.err).Logf(level, format, args...)
+	}
+	if !e.onError {
 		e.Entry.Logf(level, format, args...)
 	}
 }
 
 func (e *Entry) Logln(level logrus.Level, args ...interface{}) {
-	if (e.onError && e.err != nil) || !e.onError {
+	if e.onError && e.err != nil {
+		e.WithError(e.err).Logln(level, args...)
+	}
+	if !e.onError {
 		e.Entry.Logln(level, args...)
 	}
 }
