@@ -170,11 +170,17 @@ func (e *Entry) Logln(level logrus.Level, args ...interface{}) {
 	}
 }
 
+func (e *Entry) WithError(err error) *Entry {
+	e.err = err
+	e.Entry = e.errorLog()
+	return e
+}
+
 func (e *Entry) errorLog() *logrus.Entry {
 	if s, ok := errorToStatus(e.err); ok {
 		return e.WithFields(logrus.Fields{logrus.ErrorKey: s.Message(), "httpCode": runtime.HTTPStatusFromCode(s.Code()), "grpcCode": s.Code()})
 	}
-	return e.WithError(e.err)
+	return e.Entry.WithError(e.err)
 }
 
 func errorToStatus(err error) (*status.Status, bool) {
