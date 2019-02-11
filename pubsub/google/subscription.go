@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"cloud.google.com/go/pubsub"
-	"github.com/yabslabs/utils/logging"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/yabslabs/utils/logging"
 )
 
 const subscriptionIDFormat = "%s-%s"

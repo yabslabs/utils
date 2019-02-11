@@ -23,7 +23,6 @@ func (t *Topic) Publish(ctx context.Context, data []byte, attsKV ...string) (id 
 func (t *Topic) PublishAsync(ctx context.Context, data []byte, attsKV ...string) {
 	msg := &google_pubsub.Message{Data: data, Attributes: pairs.PairsString(attsKV...)}
 	t.Topic.Publish(ctx, msg)
-	return
 }
 func (t *Topic) EnsureSubscription(ctx context.Context) (pubsub.Subscription, error) {
 	return t.EnsureSubscriptionForSubscriber(ctx, t.client.subscriberName)
