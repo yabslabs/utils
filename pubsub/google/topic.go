@@ -4,11 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/yabslabs/utils/logging"
-
-	"github.com/yabslabs/utils/pairs"
-
 	google_pubsub "cloud.google.com/go/pubsub"
+	"github.com/yabslabs/utils/logging"
+	"github.com/yabslabs/utils/pairs"
 	"github.com/yabslabs/utils/pubsub"
 )
 
@@ -41,7 +39,7 @@ func (t *Topic) EnsureSubscriptionForSubscriber(ctx context.Context, subscriberN
 		return &Subscription{Subscription: subscription, client: t.client}, nil
 	}
 	cfg := new(google_pubsub.SubscriptionConfig)
-	subscription, err := t.client.CreateSubscription(ctx, id, *cfg)
+	subscription, err = t.client.CreateSubscription(ctx, id, *cfg)
 	if err != nil {
 		return nil, err
 	}

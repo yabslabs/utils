@@ -3,13 +3,11 @@ package google
 import (
 	"context"
 
+	google_pubsub "cloud.google.com/go/pubsub"
+	"github.com/yabslabs/utils/logging"
+	"github.com/yabslabs/utils/pubsub"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/yabslabs/utils/logging"
-
-	google_pubsub "cloud.google.com/go/pubsub"
-	"github.com/yabslabs/utils/pubsub"
 )
 
 type Google struct {
@@ -45,7 +43,8 @@ func (g *Google) EnsureTopic(ctx context.Context, topicName string) (pubsub.Topi
 	}
 
 	if !exists {
-		if t, err = g.CreateTopic(ctx, topicName); err != nil {
+		t, err = g.CreateTopic(ctx, topicName)
+		if err != nil {
 			logging.Log("UTILS-CtEI").WithError(err).Error("error calling exists topic")
 			return nil, err
 		}

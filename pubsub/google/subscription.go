@@ -3,12 +3,10 @@ package google
 import (
 	"context"
 
+	"cloud.google.com/go/pubsub"
 	"github.com/yabslabs/utils/logging"
-
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"cloud.google.com/go/pubsub"
 )
 
 const subscriptionIDFormat = "%s-%s"
