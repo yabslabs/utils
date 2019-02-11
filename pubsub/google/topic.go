@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	google_pubsub "cloud.google.com/go/pubsub"
-	"github.com/yabslabs/utils/logging"
+	"github.com/pkg/errors"
 	"github.com/yabslabs/utils/pairs"
 	"github.com/yabslabs/utils/pubsub"
 )
@@ -34,14 +34,16 @@ func (t *Topic) EnsureSubscriptionForSubscriber(ctx context.Context, subscriberN
 	id := fmt.Sprintf(subscriptionIDFormat, t.ID(), subscriberName)
 	subscription := t.client.Subscription(id)
 	exists, err := subscription.Exists(ctx)
-	logging.Log("UTILS-ySLW").OnError(err).Debug("error checking subscription")
+	if err != nil {
+		return nil, errors.Wrap(err, "subscription: check failed")
+	}
 	if exists {
 		return &Subscription{Subscription: subscription, client: t.client}, nil
 	}
 	cfg := new(google_pubsub.SubscriptionConfig)
 	subscription, err = t.client.CreateSubscription(ctx, id, *cfg)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "subscription: create failed")
 	}
 	return &Subscription{client: t.client, Subscription: subscription}, nil
 }

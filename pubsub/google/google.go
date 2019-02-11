@@ -34,8 +34,8 @@ func (g *Google) Topic(ctx context.Context, topicName string) pubsub.Topic {
 }
 
 func (g *Google) EnsureTopic(ctx context.Context, topicName string) (pubsub.Topic, error) {
-	t := g.Client.Topic(topicName)
-	exists, err := t.Exists(ctx)
+	topic := g.Client.Topic(topicName)
+	exists, err := topic.Exists(ctx)
 
 	if err != nil {
 		logging.Log("UTILS-Qomi").WithError(err).Error("error calling existing topic")
@@ -43,7 +43,7 @@ func (g *Google) EnsureTopic(ctx context.Context, topicName string) (pubsub.Topi
 	}
 
 	if !exists {
-		t, err = g.CreateTopic(ctx, topicName)
+		topic, err = g.CreateTopic(ctx, topicName)
 		if err != nil {
 			logging.Log("UTILS-CtEI").WithError(err).Error("error calling exists topic")
 			return nil, err
@@ -52,7 +52,7 @@ func (g *Google) EnsureTopic(ctx context.Context, topicName string) (pubsub.Topi
 
 	return &Topic{
 		client: g,
-		Topic:  t,
+		Topic:  topic,
 	}, nil
 }
 
