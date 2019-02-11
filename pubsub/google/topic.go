@@ -6,6 +6,7 @@ import (
 
 	google_pubsub "cloud.google.com/go/pubsub"
 	"github.com/pkg/errors"
+
 	"github.com/yabslabs/utils/pairs"
 	"github.com/yabslabs/utils/pubsub"
 )
@@ -14,8 +15,6 @@ type Topic struct {
 	client *Google
 	*google_pubsub.Topic
 }
-
-type Topics []Topic
 
 func (t *Topic) Publish(ctx context.Context, data []byte, attsKV ...string) (id string, err error) {
 	msg := &google_pubsub.Message{Data: data, Attributes: pairs.PairsString(attsKV...)}
@@ -40,8 +39,8 @@ func (t *Topic) EnsureSubscriptionForSubscriber(ctx context.Context, subscriberN
 	if exists {
 		return &Subscription{Subscription: subscription, client: t.client}, nil
 	}
-	cfg := new(google_pubsub.SubscriptionConfig)
-	subscription, err = t.client.CreateSubscription(ctx, id, *cfg)
+	cfg := google_pubsub.SubscriptionConfig{Topic: t.Topic}
+	subscription, err = t.client.CreateSubscription(ctx, id, cfg)
 	if err != nil {
 		return nil, errors.Wrap(err, "subscription: create failed")
 	}
