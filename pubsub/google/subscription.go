@@ -3,24 +3,22 @@ package google
 import (
 	"context"
 
-	"cloud.google.com/go/pubsub"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
+	ggl_pubsub "cloud.google.com/go/pubsub"
 	"github.com/yabslabs/utils/logging"
+	"github.com/yabslabs/utils/pubsub"
 )
 
 const subscriptionIDFormat = "%s-%s"
 
 type Subscription struct {
 	client *Google
-	*pubsub.Subscription
+	*ggl_pubsub.Subscription
 }
 
 func (s *Subscription) Receive(ctx context.Context, handleFunc interface{}) error {
-	typedHandleFunc, ok := handleFunc.(func(context.Context, *pubsub.Message))
+	typedHandleFunc, ok := handleFunc.(func(context.Context, *ggl_pubsub.Message))
 	if !ok {
-		return status.Error(codes.InvalidArgument, "handle function has wrong type")
+		return pubsub.ErrHandleFuncWrongType
 	}
 	go func() {
 		err := s.Subscription.Receive(ctx, typedHandleFunc)

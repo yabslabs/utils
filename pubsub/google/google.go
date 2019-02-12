@@ -3,9 +3,9 @@ package google
 import (
 	"context"
 
+	"github.com/pkg/errors"
+
 	google_pubsub "cloud.google.com/go/pubsub"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 
 	"github.com/yabslabs/utils/logging"
 	"github.com/yabslabs/utils/pubsub"
@@ -21,7 +21,7 @@ func NewGoogle(ctx context.Context, config *Config) (*Google, error) {
 	client, err := google_pubsub.NewClient(ctx, config.ProjectID)
 	if err != nil {
 		logging.Log("UTILS-zXtY").WithError(err).Error("connection to google pubsub failed")
-		return nil, status.Error(codes.Internal, "connection to google pubsub failed")
+		return nil, errors.Wrap(err, "Connecting to google pubsub failed")
 	}
 	return &Google{
 		Client:             client,
