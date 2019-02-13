@@ -2,7 +2,10 @@ package pubsub
 
 import (
 	"context"
+	"errors"
 )
+
+var ErrHandleFuncWrongType = errors.New("handle function has wrong type")
 
 type Pubsub interface {
 	EnsureTopic(ctx context.Context, topicName string) (Topic, error)
