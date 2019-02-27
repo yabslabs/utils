@@ -55,7 +55,7 @@ func (t *Topic) EnsureSubscriptionForSubscriber(ctx context.Context, subscriberN
 	dummy := func(msg *stan.Msg) {}
 	dummySubscription, err := t.client.Subscribe(t.name, dummy, opts...)
 	if err != nil || !dummySubscription.IsValid() {
-		return nil, errors.Wrap(err, "susbcribe failed")
+		return nil, errors.Wrap(err, "subscribe failed")
 	}
 
 	err = dummySubscription.Unsubscribe()
