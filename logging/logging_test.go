@@ -5,12 +5,10 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/stretchr/testify/assert"
-
-	"github.com/sirupsen/logrus"
 )
 
 func initBuf() *bytes.Buffer {
@@ -29,10 +27,10 @@ func TestLogWarn(t *testing.T) {
 
 func TestLogError(t *testing.T) {
 	buf := initBuf()
-	Log("UTILS-Ld9V").OnError(fmt.Errorf("im an error")).Warn("error occured")
+	Log("UTILS-Ld9V").OnError(fmt.Errorf("im an error")).Warn("error ocured")
 	assert.Contains(t, buf.String(), "UTILS-Ld9V")
 	assert.Contains(t, buf.String(), "level=warning")
-	assert.Contains(t, buf.String(), "msg=\"error occured\"")
+	assert.Contains(t, buf.String(), "msg=\"error ocured\"")
 	assert.Contains(t, buf.String(), "error=\"im an error\"")
 }
 

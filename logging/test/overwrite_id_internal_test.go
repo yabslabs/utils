@@ -8,7 +8,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
-	_ "github.com/yabslabs/utils/logging/internal"
+
+	// overwrites logID
+	_ "github.com/yabslabs/utils/logging/test/internal"
 )
 
 func TestOverwriteLogIDKey(t *testing.T) {
