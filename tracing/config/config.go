@@ -3,21 +3,22 @@ package config
 import (
 	"encoding/json"
 
-	cmn_trace "git.workshop21.ch/go/abraxas/tracing"
-	cmn_trace_g "git.workshop21.ch/go/abraxas/tracing/google"
-	cmn_trace_log "git.workshop21.ch/go/abraxas/tracing/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	yabs_trace "github.com/yabslabs/utils/tracing"
+	yabs_trace_g "github.com/yabslabs/utils/tracing/google"
+	yabs_trace_log "github.com/yabslabs/utils/tracing/log"
 )
 
 type TracingConfig struct {
 	Type   string
-	Config cmn_trace.Config
+	Config yabs_trace.Config
 }
 
-var tracer = map[string]func() cmn_trace.Config{
-	"google": func() cmn_trace.Config { return &cmn_trace_g.Config{} },
-	"log":    func() cmn_trace.Config { return &cmn_trace_log.Config{} },
+var tracer = map[string]func() yabs_trace.Config{
+	"google": func() yabs_trace.Config { return &yabs_trace_g.Config{} },
+	"log":    func() yabs_trace.Config { return &yabs_trace_log.Config{} },
 }
 
 func (c *TracingConfig) UnmarshalJSON(data []byte) error {
@@ -41,7 +42,7 @@ func (c *TracingConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func newTracingConfig(tracerType string, configData []byte) (cmn_trace.Config, error) {
+func newTracingConfig(tracerType string, configData []byte) (yabs_trace.Config, error) {
 	t, ok := tracer[tracerType]
 	if !ok {
 		return nil, status.Errorf(codes.Internal, "%v No config: %v", "TRACE-HMEJ", tracerType)

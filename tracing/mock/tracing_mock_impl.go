@@ -6,15 +6,15 @@ import (
 
 	"github.com/golang/mock/gomock"
 
-	"git.workshop21.ch/go/abraxas/tracing"
+	"github.com/yabslabs/utils/tracing"
 )
 
-func NewSimpleMockTracer(t *testing.T) *MockTracing {
-	return NewMockTracing(gomock.NewController(t))
+func NewSimpleMockTracer(t *testing.T) *MockTracer {
+	return NewMockTracer(gomock.NewController(t))
 }
 
 func ExpectServerSpan(ctx context.Context, mock interface{}) {
-	m := mock.(*MockTracing)
+	m := mock.(*MockTracer)
 	any := gomock.Any()
 	m.EXPECT().NewServerSpan(any, any, any).AnyTimes().Return(ctx, &tracing.Span{})
 }
