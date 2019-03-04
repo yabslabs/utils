@@ -7,7 +7,7 @@ import (
 
 var ErrHandleFuncWrongType = errors.New("handle function has wrong type")
 
-type Pubsub interface {
+type Client interface {
 	EnsureTopic(ctx context.Context, topicName string) (Topic, error)
 	EnsureTopics(ctx context.Context, topicNames ...string) (Topics, error)
 	Topic(ctx context.Context, topicName string) Topic
@@ -27,5 +27,5 @@ type Subscription interface {
 }
 
 type Config interface {
-	NewPubsub() (Pubsub, error)
+	NewPubsub() (Client, error)
 }

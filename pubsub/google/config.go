@@ -18,6 +18,6 @@ type DefaultSubscriber struct {
 	Topic       *regexp.Regexp
 }
 
-func (c *Config) NewPubsub() (pubsub.Pubsub, error) {
+func (c *Config) NewPubsub() (pubsub.Client, error) {
 	return NewGoogle(context.Background(), c)
 }
