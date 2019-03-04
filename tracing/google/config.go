@@ -13,6 +13,6 @@ type Config struct {
 	GitProjectPath string
 }
 
-func (c *Config) NewTracer(ctx context.Context) (yabs_trace.Tracing, error) {
+func (c *Config) NewTracer(ctx context.Context) (yabs_trace.Tracer, error) {
 	return NewGoogleTracing(c)
 }

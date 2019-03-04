@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-type Tracing interface {
+type Tracer interface {
 	NewSpan(ctx context.Context, pkg, method string) (context.Context, *Span)
 	NewClientSpan(ctx context.Context, pkg, method string) (context.Context, *Span)
 	NewServerSpan(ctx context.Context, pkg, method string) (context.Context, *Span)
@@ -15,5 +15,5 @@ type Tracing interface {
 }
 
 type Config interface {
-	NewTracer(ctx context.Context) (Tracing, error)
+	NewTracer(ctx context.Context) (Tracer, error)
 }
