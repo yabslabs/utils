@@ -1,11 +1,14 @@
 package logging
 
 import (
+	"time"
+
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/sirupsen/logrus"
-	"github.com/yabslabs/utils/pairs"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/yabslabs/utils/pairs"
 )
 
 type Entry struct {
@@ -145,7 +148,7 @@ func (e *Entry) Panicf(format string, args ...interface{}) {
 
 func (e *Entry) Log(level logrus.Level, args ...interface{}) {
 	if e.onError && e.err != nil {
-		e.errorLog().Log(level, args...)
+		e.errorLog().Entry.Log(level, args...)
 	}
 	if !e.onError {
 		e.Entry.Log(level, args...)
@@ -172,15 +175,31 @@ func (e *Entry) Logln(level logrus.Level, args ...interface{}) {
 
 func (e *Entry) WithError(err error) *Entry {
 	e.err = err
-	e.Entry = e.errorLog()
+	e = e.errorLog()
 	return e
 }
 
-func (e *Entry) errorLog() *logrus.Entry {
+func (e *Entry) WithField(key string, value interface{}) *Entry {
+	e.Entry = e.Entry.WithField(key, value)
+	return e
+}
+
+func (e *Entry) WithFields(fields logrus.Fields) *Entry {
+	e.Entry = e.Entry.WithFields(fields)
+	return e
+}
+
+func (e *Entry) WithTime(t time.Time) *Entry {
+	e.Entry = e.Entry.WithTime(t)
+	return e
+}
+
+func (e *Entry) errorLog() *Entry {
 	if s, ok := errorToStatus(e.err); ok {
-		return e.WithFields(logrus.Fields{logrus.ErrorKey: s.Message(), "httpCode": runtime.HTTPStatusFromCode(s.Code()), "grpcCode": s.Code()})
+		e = e.WithFields(logrus.Fields{"httpCode": runtime.HTTPStatusFromCode(s.Code()), "grpcCode": s.Code()})
 	}
-	return e.Entry.WithError(e.err)
+	e.Entry = e.Entry.WithError(e.err)
+	return e
 }
 
 func errorToStatus(err error) (*status.Status, bool) {
