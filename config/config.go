@@ -28,7 +28,7 @@ func readConfigFile(configReader ConfigReader, configFile string, obj interface{
 	configFile = os.ExpandEnv(configFile)
 
 	if _, err := os.Stat(configFile); err != nil {
-		logging.LogWithFields("CONFI-X3ZKOp", "file", configFile).WithError(err).Debug("config file does not exist")
+		logging.LogWithFields("CONFI-X3ZKOp", "file", configFile).WithError(err).Warn("config file does not exist")
 		return nil
 	}
 
