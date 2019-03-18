@@ -27,9 +27,9 @@ func CancelContextOnSignal(parent context.Context, signals ...os.Signal) context
 
 		select {
 		case s := <-sigC:
-			logging.WithIDFields("CONT-5dfa4c77", "signal", s).Info("received signal, canceling context")
+			logging.LogWithFields("CONT-5dfa4c77", "signal", s).Info("received signal, canceling context")
 			cancel()
-			logging.WithID("CONT-b88cf14a").Info("context canceled.")
+			logging.Log("CONT-b88cf14a").Info("context canceled.")
 		case <-ctx.Done():
 		}
 	}()
