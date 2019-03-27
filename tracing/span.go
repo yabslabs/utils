@@ -62,11 +62,11 @@ func (s *Span) Annotatef(format string, addiations ...interface{}) *Span {
 }
 
 func toTraceAttribute(key string, value interface{}) (attr trace.Attribute, err error) {
-	switch value.(type) {
+	switch value := value.(type) {
 	case bool:
-		return trace.BoolAttribute(key, value.(bool)), nil
+		return trace.BoolAttribute(key, value), nil
 	case string:
-		return trace.StringAttribute(key, value.(string)), nil
+		return trace.StringAttribute(key, value), nil
 	}
 	if valueInt, err := convertToInt64(value); err == nil {
 		return trace.Int64Attribute(key, valueInt), nil
