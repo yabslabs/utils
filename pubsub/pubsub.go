@@ -2,30 +2,20 @@ package pubsub
 
 import (
 	"context"
-	"errors"
+
+	"gocloud.dev/pubsub"
+	_ "gocloud.dev/pubsub/awssnssqs" // env var AWS_SDK_LOAD_CONFIG
+	_ "gocloud.dev/pubsub/azuresb"   // env var SERVICEBUS_CONNECTION_STRING
+	_ "gocloud.dev/pubsub/gcppubsub" // env var GOOGLE_APPLICATION_CREDENTIALS
+	_ "gocloud.dev/pubsub/mempubsub"
+	_ "gocloud.dev/pubsub/natspubsub"   // env var NATS_SERVER_URL
+	_ "gocloud.dev/pubsub/rabbitpubsub" // env var RABBIT_SERVER_URL
 )
 
-var ErrHandleFuncWrongType = errors.New("handle function has wrong type")
-
-type Pubsub interface {
-	EnsureTopic(ctx context.Context, topicName string) (Topic, error)
-	EnsureTopics(ctx context.Context, topicNames ...string) (Topics, error)
-	Topic(ctx context.Context, topicName string) Topic
+func OpenTopic(ctx context.Context, url string) (*pubsub.Topic, error) {
+	return pubsub.OpenTopic(ctx, url)
 }
 
-type Topic interface {
-	Publish(ctx context.Context, data []byte, attsKV ...string) (string, error)
-	PublishAsync(ctx context.Context, data []byte, attsKV ...string)
-	EnsureSubscription(ctx context.Context) (Subscription, error)
-	EnsureSubscriptionForSubscriber(ctx context.Context, subscriberName string) (Subscription, error)
-}
-
-type Topics []Topic
-
-type Subscription interface {
-	Receive(ctx context.Context, handleFunc interface{}) error
-}
-
-type Config interface {
-	NewPubsub() (Pubsub, error)
+func OpenSubscription(ctx context.Context, url string) (*pubsub.Subscription, error) {
+	return pubsub.OpenSubscription(ctx, url)
 }
